@@ -80,7 +80,9 @@
 	CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
 	for (int i=1; i<[currentVC.plots count]; i++) {
 		if ((25+2*i) < _AXIS_LENGTH_X) {
-			UIAcceleration *a = [currentVC.plots objectAtIndex:i];
+			//UIAcceleration *a = [currentVC.plots objectAtIndex:i];
+      CMAcceleration a;
+      [[currentVC.plots objectAtIndex:i] getValue:&a];
 			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y - (80*a.x));
 		}
 	}	
@@ -94,7 +96,9 @@
 	CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
 	for (int i=1; i<[currentVC.plots count]; i++) {
 		if ((25+2*i) < _AXIS_LENGTH_X) {
-			UIAcceleration *a = [currentVC.plots objectAtIndex:i];
+			//UIAcceleration *a = [currentVC.plots objectAtIndex:i];
+      CMAcceleration a;
+      [[currentVC.plots objectAtIndex:i] getValue:&a];
 			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y - (80*a.y));
 		}
 	}	
@@ -108,7 +112,9 @@
 	CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
 	for (int i=1; i<[currentVC.plots count]; i++) {
 		if ((25+2*i) < _AXIS_LENGTH_X) {
-			UIAcceleration *a = [currentVC.plots objectAtIndex:i];
+			//UIAcceleration *a = [currentVC.plots objectAtIndex:i];
+      CMAcceleration a;
+      [[currentVC.plots objectAtIndex:i] getValue:&a];
 			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y - (80*a.z));
 		}
 	}

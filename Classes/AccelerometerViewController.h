@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <CoreMotion/CoreMotion.h>
 
 @interface AccelerometerViewController : UIViewController <UIAccelerometerDelegate>{
 	IBOutlet UILabel *xLabel;
@@ -17,6 +18,8 @@
 }
 @property(nonatomic, retain) NSMutableArray *plots;
 @property(nonatomic, retain) NSMutableArray *totals;
+@property(strong, nonatomic) CMMotionManager *motionManager;
+
 -(IBAction)screenTouched;
 @end
 
