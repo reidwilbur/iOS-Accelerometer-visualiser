@@ -76,19 +76,17 @@
 	CGContextSetStrokeColor(c, red);
 	CGContextSetFillColor(c, red);
 	
-	//X COORDS
+	//rot rate x
 	CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
 	for (int i=1; i<[currentVC.plots count]; i++) {
 		if ((25+2*i) < _AXIS_LENGTH_X) {
-			//UIAcceleration *a = [currentVC.plots objectAtIndex:i];
-      CMAcceleration a;
-      [[currentVC.plots objectAtIndex:i] getValue:&a];
-			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y - (80*a.x));
+      CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
+			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y - (80*a.rotationRate.x));
 		}
 	}	
 	CGContextStrokePath(c);
 	
-	//Y COORDINATES
+	//rot rate y
 	CGContextBeginPath(c);
 	CGContextSetStrokeColor(c, blue);
 	CGContextSetFillColor(c, blue);
@@ -96,15 +94,13 @@
 	CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
 	for (int i=1; i<[currentVC.plots count]; i++) {
 		if ((25+2*i) < _AXIS_LENGTH_X) {
-			//UIAcceleration *a = [currentVC.plots objectAtIndex:i];
-      CMAcceleration a;
-      [[currentVC.plots objectAtIndex:i] getValue:&a];
-			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y - (80*a.y));
+      CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
+			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y - (80*a.rotationRate.y));
 		}
 	}	
 	CGContextStrokePath(c);
 	
-	//Z COORDINATES
+	//rot rate z
 	CGContextBeginPath(c);
 	CGContextSetStrokeColor(c, green);
 	CGContextSetFillColor(c, green);
@@ -112,10 +108,8 @@
 	CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
 	for (int i=1; i<[currentVC.plots count]; i++) {
 		if ((25+2*i) < _AXIS_LENGTH_X) {
-			//UIAcceleration *a = [currentVC.plots objectAtIndex:i];
-      CMAcceleration a;
-      [[currentVC.plots objectAtIndex:i] getValue:&a];
-			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y - (80*a.z));
+      CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
+			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y - (80*a.rotationRate.z));
 		}
 	}
 	CGContextStrokePath(c);

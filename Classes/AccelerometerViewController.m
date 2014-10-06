@@ -19,48 +19,43 @@
   self.motionManager.accelerometerUpdateInterval = 0.01;
   self.motionManager.gyroUpdateInterval = 0.01;
 
-  [self.motionManager startAccelerometerUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMAccelerometerData *accelerometerData, NSError *error) {
-    [self outputAccelerationData:accelerometerData.acceleration];
-  }];
-
-  [self.motionManager startGyroUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMGyroData *gyroData, NSError *error) {
-    [self outputRotationData:gyroData.rotationRate];
-  }];
-
 	self.plots = [NSMutableArray arrayWithCapacity:100];
 	self.totals = [NSMutableArray arrayWithCapacity:100];
 }
 
-- (void)outputAccelerationData:(CMAcceleration)acceleration
+- (void)captureGesture:(UIButton *)button
 {
-  xLabel.text = [NSString stringWithFormat: @"%f", 100*acceleration.x];
-  yLabel.text = [NSString stringWithFormat: @"%f", 100*acceleration.y];
-  zLabel.text = [NSString stringWithFormat: @"%f", 100*acceleration.z];
+  NSLog(@"capture gesture");
 
-  [[self view] setNeedsDisplay];
-
-  BOOL drawOnlyWhenMoving = NO; //change this if you want it only to update the graph when the movement is over a threshold value
-  float minimumAcceleration = 1.1f;
-
-  NSLog(@"accel data %f %f %f", acceleration.x, acceleration.y, acceleration.z);
-
-  if (drawOnlyWhenMoving) {
-      if (abs(acceleration.x)+abs(acceleration.y)+abs(acceleration.z) > minimumAcceleration) {
-          [self.plots insertObject:[NSValue valueWithBytes:&acceleration objCType:@encode(CMAcceleration)] atIndex:0];
-          NSNumber *n = [NSNumber numberWithDouble:(fabs(acceleration.x)+fabs(acceleration.y)+fabs(acceleration.z))];
-          [self.totals insertObject:n atIndex:0];
-      }
-  }
-  else {
-    [self.plots insertObject:[NSValue valueWithBytes:&acceleration objCType:@encode(CMAcceleration)] atIndex:0];
-    NSNumber *n = [NSNumber numberWithDouble:(fabs(acceleration.x)+fabs(acceleration.y)+fabs(acceleration.z))];
-    [self.totals insertObject:n atIndex:0];
-  }
+  [NSTimer scheduledTimerWithTimeInterval:.25 target:self selector:@selector(startCapture:) userInfo:nil repeats:NO];
 }
 
-- (void)outputRotationData:(CMRotationRate)rotation
+- (void)startCapture:(NSTimer *)timer
 {
-  //NSLog(@"got rotation data");
+  NSLog(@"Capture %@", [timer userInfo]);
+
+  [self screenTouched];
+
+  [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion *motion, NSError *error) {
+    [self outputMotionData:motion];
+  }];
+
+  [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(endCapture:) userInfo:nil repeats:NO];
+}
+
+- (void)endCapture:(NSTimer *)timer
+{
+  NSLog(@"stopping gesture capture");
+  [self.motionManager stopDeviceMotionUpdates];
+}
+
+- (void)outputMotionData:(CMDeviceMotion*)motion
+{
+  [[self view] setNeedsDisplay];
+
+  NSLog(@"%@", motion);
+
+  [self.plots insertObject:motion atIndex:0];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
