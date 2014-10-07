@@ -9,7 +9,7 @@
 #import "AccelerometerViewController.h"
 
 @implementation AccelerometerViewController
-@synthesize plots, totals;
+@synthesize plots;
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
@@ -20,33 +20,34 @@
   self.motionManager.gyroUpdateInterval = 0.01;
 
 	self.plots = [NSMutableArray arrayWithCapacity:100];
-	self.totals = [NSMutableArray arrayWithCapacity:100];
 }
 
-- (void)captureGesture:(UIButton *)button
+- (void)captureGesture
 {
   NSLog(@"capture gesture");
 
-  [NSTimer scheduledTimerWithTimeInterval:.25 target:self selector:@selector(startCapture:) userInfo:nil repeats:NO];
+  [gestureName resignFirstResponder];
+
+  [NSTimer scheduledTimerWithTimeInterval:.25 target:self selector:@selector(startCapture:) userInfo:gestureName.text repeats:NO];
 }
 
 - (void)startCapture:(NSTimer *)timer
 {
   NSLog(@"Capture %@", [timer userInfo]);
 
-  [self screenTouched];
+  [self clearData];
 
   [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion *motion, NSError *error) {
     [self outputMotionData:motion];
   }];
 
-  [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(endCapture:) userInfo:nil repeats:NO];
+  [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(endCapture:) userInfo:[timer userInfo] repeats:NO];
 }
 
 - (void)endCapture:(NSTimer *)timer
 {
-  NSLog(@"stopping gesture capture");
   [self.motionManager stopDeviceMotionUpdates];
+  NSLog(@"Captured %@", [timer userInfo]);
 }
 
 - (void)outputMotionData:(CMDeviceMotion*)motion
@@ -74,9 +75,16 @@
 	// Release any retained subviews of the main view.
 	// e.g. self.myOutlet = nil;
 }
--(IBAction)screenTouched{
+
+-(void)clearData
+{
+  self.plots = [NSMutableArray arrayWithCapacity:100];
+  [[self view] setNeedsDisplay];
+}
+
+-(IBAction)clearAll{
 	self.plots = [NSMutableArray arrayWithCapacity:100];
-	self.totals = [NSMutableArray arrayWithCapacity:100];
+  gestureName.text = @"";
 	[[self view] setNeedsDisplay];
 }
 

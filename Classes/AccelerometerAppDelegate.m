@@ -25,12 +25,6 @@
   // Add the view controller's view to the window and display.
   [window addSubview:viewController.view];
 
-  UIButton* button = [[UIButton alloc] initWithFrame:CGRectMake(10.0, 300.0, 200.0, 75.0)];
-  [button setBackgroundColor:[UIColor colorWithRed:.6 green:.6 blue:.6 alpha:1.0]];
-  [button setTitle:@"capture gesture" forState:UIControlStateNormal];
-  [button addTarget:viewController action:@selector(captureGesture:) forControlEvents:UIControlEventTouchUpInside];
-  [window addSubview:button];
-
   [window makeKeyAndVisible];
 
   return YES;

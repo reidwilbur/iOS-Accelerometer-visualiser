@@ -10,16 +10,13 @@
 #import <CoreMotion/CoreMotion.h>
 
 @interface AccelerometerViewController : UIViewController <UIAccelerometerDelegate>{
-	IBOutlet UILabel *xLabel;
-	IBOutlet UILabel *yLabel;
-	IBOutlet UILabel *zLabel;
+  IBOutlet UITextField *gestureName;
 	NSMutableArray *plots;
-	NSMutableArray *totals;
 }
 @property(nonatomic, retain) NSMutableArray *plots;
-@property(nonatomic, retain) NSMutableArray *totals;
 @property(strong, nonatomic) CMMotionManager *motionManager;
 
--(IBAction)screenTouched;
+-(IBAction)clearAll;
+-(IBAction)captureGesture;
 @end
 

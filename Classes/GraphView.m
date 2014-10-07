@@ -8,7 +8,7 @@
 
 #import "GraphView.h"
 #define _AXIS_ORIGIN_X 20
-#define _AXIS_ORIGIN_Y 145
+#define _AXIS_ORIGIN_Y 225
 #define _AXIS_LENGTH_X 460
 #define _AXIS_LENGTH_Y -135
 
@@ -113,31 +113,7 @@
 		}
 	}
 	CGContextStrokePath(c);
-	
-    BOOL drawTotalAcceleration = NO;
-    if(drawTotalAcceleration){
-        //totals
-        CGContextBeginPath(c);
-        CGContextSetStrokeColor(c, yellow);
-        CGContextSetFillColor(c, yellow);
-        double lowPassResults;
-        CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y-_AXIS_LENGTH_Y);
-        for (int i=1; i<[currentVC.totals count]; i++) {
-            if ((25+2*i) < _AXIS_LENGTH_X) {
-                NSNumber *j = (NSNumber *) [currentVC.totals objectAtIndex:i];
-                const double ALPHA = 0.1;
-                double peakPowerForChannel = pow(10, (100 * j.doubleValue));
-                double oldLowPass = lowPassResults;
-                peakPowerForChannel = peakPowerForChannel * 50;
-                lowPassResults = ALPHA * peakPowerForChannel + (1.0 - ALPHA) * oldLowPass;
-                CGContextAddLineToPoint(c, 25+2*i, _AXIS_ORIGIN_Y - (80*j.integerValue));
-                //CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y-_AXIS_LENGTH_Y - lowPassResults);
-            }
-        }
-        CGContextStrokePath(c);
-
-    }
-   }
+}
 
 
 - (void)dealloc {
