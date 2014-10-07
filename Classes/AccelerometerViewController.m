@@ -9,11 +9,13 @@
 #import "AccelerometerViewController.h"
 
 @implementation AccelerometerViewController
-@synthesize plots;
+@synthesize plots, dataFilePath;
 
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
+
+  self.dataFilePath = [[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"capture.data"];
 
   self.motionManager = [[CMMotionManager alloc] init];
   self.motionManager.accelerometerUpdateInterval = 0.01;
@@ -33,12 +35,13 @@
 
 - (void)startCapture:(NSTimer *)timer
 {
-  NSLog(@"Capture %@", [timer userInfo]);
+  NSLog(@"Start capture %@", [timer userInfo]);
 
   [self clearData];
 
   [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion *motion, NSError *error) {
-    [self outputMotionData:motion];
+    [self.plots insertObject:motion atIndex:0];
+    [[self view] setNeedsDisplay];
   }];
 
   [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(endCapture:) userInfo:[timer userInfo] repeats:NO];
@@ -47,16 +50,7 @@
 - (void)endCapture:(NSTimer *)timer
 {
   [self.motionManager stopDeviceMotionUpdates];
-  NSLog(@"Captured %@", [timer userInfo]);
-}
-
-- (void)outputMotionData:(CMDeviceMotion*)motion
-{
-  [[self view] setNeedsDisplay];
-
-  //NSLog(@"%@", motion);
-
-  [self.plots insertObject:motion atIndex:0];
+  NSLog(@"End captured %@", [timer userInfo]);
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
@@ -94,26 +88,73 @@
   return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
+-(IBAction)deleteAll
+{
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  BOOL success = false;
+  NSError *error;
+
+  if ([fileManager fileExistsAtPath:self.dataFilePath]) {
+    success = [fileManager removeItemAtPath:self.dataFilePath error:&error];
+    if (success) {
+      NSString *msg = [NSString stringWithFormat:@"Deleted file %@", self.dataFilePath];
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success" message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+      [alert show];
+      [alert release];
+    }
+    else {
+      NSString *msg = [NSString stringWithFormat:@"Could not delete %@", self.dataFilePath];
+      UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+      [alert show];
+      [alert release];
+    }
+  }
+}
+
 -(IBAction)save
 {
-  NSString *path = [[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:gestureName.text] stringByAppendingString:@".data"];
-
-  NSMutableString *output = [[NSMutableString alloc] initWithString:@""];
+  NSMutableString *output = [[NSMutableString alloc] initWithFormat:@"%@|", [gestureName text]];
   for (unsigned long i=[self.plots count]-1; i>0; i--) {
-    [output appendFormat:@"%@\n", [self.plots objectAtIndex:i]];
+    CMDeviceMotion *motion = [self.plots objectAtIndex:i];
+    [output appendFormat:@"%f,%f,%f,%f,%f,%f,%f,%f,%f|",
+     motion.userAcceleration.x,
+     motion.userAcceleration.y,
+     motion.userAcceleration.z,
+     motion.rotationRate.x,
+     motion.rotationRate.y,
+     motion.rotationRate.z,
+     motion.gravity.x,
+     motion.gravity.y,
+     motion.gravity.z];
+  }
+  [output appendString:@"\n"];
+
+  NSFileManager *fileManager = [NSFileManager defaultManager];
+  BOOL success = false;
+  if (![fileManager fileExistsAtPath:self.dataFilePath]) {
+    success = [output writeToFile:self.dataFilePath atomically:YES encoding:NSUTF8StringEncoding error:nil];
+    NSLog(@"Created and wrote file %@", self.dataFilePath);
+  }
+  else {
+    @try {
+      NSFileHandle *fileHandle = [NSFileHandle fileHandleForWritingAtPath:self.dataFilePath];
+      [fileHandle seekToEndOfFile];
+      [fileHandle writeData:[output dataUsingEncoding:NSUTF8StringEncoding]];
+      success = true;
+      NSLog(@"Appended capture %@ to file %@", [gestureName text], self.dataFilePath);
+    }
+    @catch (NSException *exception) {
+      success = false;
+      NSLog(@"Exception while trying to append file %@ : %@", self.dataFilePath, exception);
+    }
   }
 
-  BOOL success = [output writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
   if (!success) {
-    NSLog(@"Unable to write file %@", path);
-    NSString *msg = [NSString stringWithFormat:@"Could not write file %@", path];
+    NSLog(@"Unable to write file %@", self.dataFilePath);
+    NSString *msg = [NSString stringWithFormat:@"Could not write file %@", self.dataFilePath];
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
     [alert show];
     [alert release];
-  }
-  else {
-    NSLog(@"Wrote file %@", path);
-    [self clearAll];
   }
 }
 
