@@ -33,7 +33,7 @@
 	CGFloat green[4] = {0.0f, 1.0f, 0.0f, 1.0f};
 	CGFloat red[4] = {1.0f, 0.0f, 0.0f, 1.0f};
 	CGFloat blue[4] = {0.0f, 0.0f, 1.0f, 1.0f};
-    CGFloat yellow[4] = {1.0f,1.0f,0.0f,1.0f};
+  CGFloat yellow[4] = {1.0f,1.0f,0.0f,1.0f};
 	CGFloat white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 	
 	//draw axis

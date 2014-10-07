@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>BC86693C-F383-47E9-A8FB-1B68E2904287</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Accelerometer</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>CAFBF1B3D6761B4FF2D2EAB27C8DE9869636DD82</key>
+		<string>https://github.com/joejcon1/iOS-Accelerometer-visualiser</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Accelerometer.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>CAFBF1B3D6761B4FF2D2EAB27C8DE9869636DD82</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/joejcon1/iOS-Accelerometer-visualiser</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>CAFBF1B3D6761B4FF2D2EAB27C8DE9869636DD82</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>CAFBF1B3D6761B4FF2D2EAB27C8DE9869636DD82</string>
+			<key>IDESourceControlWCCName</key>
+			<string>iOS-Accelerometer-visualiser</string>
+		</dict>
+	</array>
+</dict>
+</plist>

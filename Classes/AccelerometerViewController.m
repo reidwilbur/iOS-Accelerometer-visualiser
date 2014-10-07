@@ -54,7 +54,7 @@
 {
   [[self view] setNeedsDisplay];
 
-  NSLog(@"%@", motion);
+  //NSLog(@"%@", motion);
 
   [self.plots insertObject:motion atIndex:0];
 }
@@ -82,13 +82,40 @@
   [[self view] setNeedsDisplay];
 }
 
--(IBAction)clearAll{
+-(IBAction)clearAll
+{
 	self.plots = [NSMutableArray arrayWithCapacity:100];
   gestureName.text = @"";
 	[[self view] setNeedsDisplay];
 }
 
+-(NSURL *)applicationDocumentsDirectory
+{
+  return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+}
 
+-(IBAction)save
+{
+  NSString *path = [[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:gestureName.text] stringByAppendingString:@".data"];
+
+  NSMutableString *output = [[NSMutableString alloc] initWithString:@""];
+  for (unsigned long i=[self.plots count]-1; i>0; i--) {
+    [output appendFormat:@"%@\n", [self.plots objectAtIndex:i]];
+  }
+
+  BOOL success = [output writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:nil];
+  if (!success) {
+    NSLog(@"Unable to write file %@", path);
+    NSString *msg = [NSString stringWithFormat:@"Could not write file %@", path];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
+    [alert show];
+    [alert release];
+  }
+  else {
+    NSLog(@"Wrote file %@", path);
+    [self clearAll];
+  }
+}
 
 - (void)dealloc {
 	//[[UIAccelerometer sharedAccelerometer] setDelegate:nil];

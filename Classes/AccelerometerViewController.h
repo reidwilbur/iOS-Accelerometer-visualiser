@@ -18,5 +18,6 @@
 
 -(IBAction)clearAll;
 -(IBAction)captureGesture;
+-(IBAction)save;
 @end
 
