@@ -18,8 +18,7 @@
   self.dataFilePath = [[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"capture.data"];
 
   self.motionManager = [[CMMotionManager alloc] init];
-  self.motionManager.accelerometerUpdateInterval = 0.01;
-  self.motionManager.gyroUpdateInterval = 0.01;
+  self.motionManager.deviceMotionUpdateInterval = 0.01;
 
 	self.plots = [NSMutableArray arrayWithCapacity:100];
 }
@@ -42,15 +41,18 @@
   [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion *motion, NSError *error) {
     [self.plots insertObject:motion atIndex:0];
     [[self view] setNeedsDisplay];
+    if ([self.plots count] == 256) {
+      [self endCapture];
+    }
   }];
 
-  [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(endCapture:) userInfo:[timer userInfo] repeats:NO];
+//  [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(endCapture:) userInfo:[timer userInfo] repeats:NO];
 }
 
-- (void)endCapture:(NSTimer *)timer
+- (void)endCapture
 {
   [self.motionManager stopDeviceMotionUpdates];
-  NSLog(@"End captured %@", [timer userInfo]);
+  NSLog(@"End captured");
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

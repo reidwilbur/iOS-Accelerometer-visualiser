@@ -79,9 +79,9 @@
 	//rot rate x
 	CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
 	for (int i=1; i<[currentVC.plots count]; i++) {
-		if ((25+2*i) < _AXIS_LENGTH_X) {
+		if ((25+i) < _AXIS_LENGTH_X) {
       CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
-			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y - (80*a.rotationRate.x));
+			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*a.rotationRate.x));
 		}
 	}	
 	CGContextStrokePath(c);
@@ -93,9 +93,9 @@
 	
 	CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
 	for (int i=1; i<[currentVC.plots count]; i++) {
-		if ((25+2*i) < _AXIS_LENGTH_X) {
+		if ((25+i) < _AXIS_LENGTH_X) {
       CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
-			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y - (80*a.rotationRate.y));
+			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*a.rotationRate.y));
 		}
 	}	
 	CGContextStrokePath(c);
@@ -107,9 +107,9 @@
 	
 	CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
 	for (int i=1; i<[currentVC.plots count]; i++) {
-		if ((25+2*i) < _AXIS_LENGTH_X) {
+		if ((25+i) < _AXIS_LENGTH_X) {
       CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
-			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+2*i, _AXIS_ORIGIN_Y - (80*a.rotationRate.z));
+			CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*a.rotationRate.z));
 		}
 	}
 	CGContextStrokePath(c);
