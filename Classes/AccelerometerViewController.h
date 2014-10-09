@@ -9,6 +9,9 @@
 #import <UIKit/UIKit.h>
 #import <CoreMotion/CoreMotion.h>
 
+#define BUFFER_SIZE 64
+
+
 @interface AccelerometerViewController : UIViewController <UIAccelerometerDelegate>{
   IBOutlet UITextField *gestureName;
 	NSMutableArray *plots;
@@ -22,5 +25,8 @@
 -(IBAction)captureGesture;
 -(IBAction)save;
 -(IBAction)deleteAll;
+-(IBAction)train;
+
+
 @end
 

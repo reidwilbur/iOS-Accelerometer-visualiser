@@ -14,10 +14,14 @@
 		288765A50DF7441C002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765A40DF7441C002DB57D /* CoreGraphics.framework */; };
 		2899E5220DE3E06400AC0155 /* AccelerometerViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2899E5210DE3E06400AC0155 /* AccelerometerViewController.xib */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
-		28D7ACF80DDB3853001CB0EB /* AccelerometerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* AccelerometerViewController.m */; };
+		28D7ACF80DDB3853001CB0EB /* AccelerometerViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 28D7ACF70DDB3853001CB0EB /* AccelerometerViewController.mm */; };
 		303E10D119E306E9000B2B51 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 303E10D019E306E9000B2B51 /* CoreMotion.framework */; };
 		303E110E19E47914000B2B51 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 303E110D19E47914000B2B51 /* Default-568h@2x.png */; };
-		5753F0D112CA211200BD7A66 /* GraphView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5753F0D012CA211200BD7A66 /* GraphView.m */; };
+		5753F0D112CA211200BD7A66 /* GraphView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 5753F0D012CA211200BD7A66 /* GraphView.mm */; };
+		C30FF79519E4E2860065FB9E /* FFT.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C30FF79319E4E2860065FB9E /* FFT.cpp */; };
+		C30FF79819E4E6970065FB9E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C30FF79719E4E6960065FB9E /* Accelerate.framework */; };
+		C30FF79A19E594A20065FB9E /* MotionFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = C30FF79919E594A20065FB9E /* MotionFilter.m */; };
+		C30FF79C19E5D7F20065FB9E /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C30FF77A19E47FB40065FB9E /* opencv2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,14 +34,20 @@
 		2899E5210DE3E06400AC0155 /* AccelerometerViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = AccelerometerViewController.xib; sourceTree = "<group>"; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		28D7ACF60DDB3853001CB0EB /* AccelerometerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccelerometerViewController.h; sourceTree = "<group>"; };
-		28D7ACF70DDB3853001CB0EB /* AccelerometerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AccelerometerViewController.m; sourceTree = "<group>"; };
+		28D7ACF70DDB3853001CB0EB /* AccelerometerViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AccelerometerViewController.mm; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		303E10D019E306E9000B2B51 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		303E110D19E47914000B2B51 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		32CA4F630368D1EE00C91783 /* Accelerometer_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Accelerometer_Prefix.pch; sourceTree = "<group>"; };
 		5753F0CF12CA211200BD7A66 /* GraphView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GraphView.h; sourceTree = "<group>"; };
-		5753F0D012CA211200BD7A66 /* GraphView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GraphView.m; sourceTree = "<group>"; };
+		5753F0D012CA211200BD7A66 /* GraphView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = GraphView.mm; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Accelerometer-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Accelerometer-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
+		C30FF77A19E47FB40065FB9E /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../../../Downloads/opencv2.framework; sourceTree = "<group>"; };
+		C30FF79319E4E2860065FB9E /* FFT.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FFT.cpp; sourceTree = "<group>"; };
+		C30FF79419E4E2860065FB9E /* FFT.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FFT.h; sourceTree = "<group>"; };
+		C30FF79719E4E6960065FB9E /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		C30FF79919E594A20065FB9E /* MotionFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MotionFilter.m; sourceTree = "<group>"; };
+		C30FF79B19E594D40065FB9E /* MotionFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MotionFilter.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -45,6 +55,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C30FF79C19E5D7F20065FB9E /* opencv2.framework in Frameworks */,
+				C30FF79819E4E6970065FB9E /* Accelerate.framework in Frameworks */,
 				303E10D119E306E9000B2B51 /* CoreMotion.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
@@ -59,11 +71,15 @@
 			isa = PBXGroup;
 			children = (
 				1D3623240D0F684500981E51 /* AccelerometerAppDelegate.h */,
+				C30FF79919E594A20065FB9E /* MotionFilter.m */,
+				C30FF79B19E594D40065FB9E /* MotionFilter.h */,
 				1D3623250D0F684500981E51 /* AccelerometerAppDelegate.m */,
 				28D7ACF60DDB3853001CB0EB /* AccelerometerViewController.h */,
-				28D7ACF70DDB3853001CB0EB /* AccelerometerViewController.m */,
+				28D7ACF70DDB3853001CB0EB /* AccelerometerViewController.mm */,
 				5753F0CF12CA211200BD7A66 /* GraphView.h */,
-				5753F0D012CA211200BD7A66 /* GraphView.m */,
+				5753F0D012CA211200BD7A66 /* GraphView.mm */,
+				C30FF79319E4E2860065FB9E /* FFT.cpp */,
+				C30FF79419E4E2860065FB9E /* FFT.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -111,6 +127,8 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				C30FF79719E4E6960065FB9E /* Accelerate.framework */,
+				C30FF77A19E47FB40065FB9E /* opencv2.framework */,
 				303E10D019E306E9000B2B51 /* CoreMotion.framework */,
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
@@ -185,9 +203,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
+				C30FF79A19E594A20065FB9E /* MotionFilter.m in Sources */,
+				C30FF79519E4E2860065FB9E /* FFT.cpp in Sources */,
 				1D3623260D0F684500981E51 /* AccelerometerAppDelegate.m in Sources */,
-				28D7ACF80DDB3853001CB0EB /* AccelerometerViewController.m in Sources */,
-				5753F0D112CA211200BD7A66 /* GraphView.m in Sources */,
+				28D7ACF80DDB3853001CB0EB /* AccelerometerViewController.mm in Sources */,
+				5753F0D112CA211200BD7A66 /* GraphView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,6 +220,10 @@
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/rouge/Downloads,
+				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -218,6 +242,10 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				COPY_PHASE_STRIP = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/rouge/Downloads,
+				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Accelerometer_Prefix.pch;
 				INFOPLIST_FILE = "Accelerometer-Info.plist";

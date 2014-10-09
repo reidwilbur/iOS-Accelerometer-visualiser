@@ -8,11 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import "AccelerometerViewController.h"
+#import "MotionFilter.h"
+
+#import "FFT.h"
+
 
 @interface GraphView : UIView {
 	AccelerometerViewController *currentVC;
+    //HighpassFilter *filter;
+
+   // FFT *fftAccel;
 }
 
 @property(nonatomic, retain)IBOutlet AccelerometerViewController *currentVC;
+@property(nonatomic, retain) HighpassFilter *filter;
+
 
 @end

@@ -5,13 +5,13 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>BC86693C-F383-47E9-A8FB-1B68E2904287</string>
+	<string>B69FAE53-E67E-4CC9-84CD-D65FB2ED21F1</string>
 	<key>IDESourceControlProjectName</key>
 	<string>Accelerometer</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>CAFBF1B3D6761B4FF2D2EAB27C8DE9869636DD82</key>
-		<string>https://github.com/joejcon1/iOS-Accelerometer-visualiser</string>
+		<string>https://github.com/reidwilbur/iOS-Accelerometer-visualiser.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>Accelerometer.xcodeproj</string>
@@ -21,7 +21,7 @@
 		<string>../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/joejcon1/iOS-Accelerometer-visualiser</string>
+	<string>https://github.com/reidwilbur/iOS-Accelerometer-visualiser.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
