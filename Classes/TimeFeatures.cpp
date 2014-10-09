@@ -27,7 +27,7 @@ vector<float> TimeFeatures::getFeatures(vector<vector<float> > data)
     featRms(oneDimensionData);
     featEnv(oneDimensionData);
     featSkewAndKurt(oneDimensionData);
-    featJerk(oneDimensionData);
+    featAutoCorr(oneDimensionData);
   }
   return featList;
 }
@@ -68,7 +68,7 @@ void TimeFeatures::featZcr(vector<float>& data)
     sq_sum+=(ZCRList[j]-meanZCR)*(ZCRList[j]-meanZCR);
   float stdevZCR = sqrt(sq_sum/(float)(ZCRList.size()-1));
   featList.push_back(meanZCR);
-  featList.push_back(stdevZCR);
+  //featList.push_back(stdevZCR);
 }
 
 void TimeFeatures::featRms(vector<float>& data)
@@ -98,7 +98,7 @@ void TimeFeatures::featRms(vector<float>& data)
     sq_sum+=(rmsList[j]-meanRms)*(rmsList[j]-meanRms);
   float stdevRms = sqrt(sq_sum/(float)(rmsList.size()-1));
   featList.push_back(meanRms);
-  featList.push_back(stdevRms);
+  //featList.push_back(stdevRms);
 }
 
 void TimeFeatures::featEnv(vector<float>& data)
@@ -124,12 +124,39 @@ void TimeFeatures::featEnv(vector<float>& data)
     sq_sum+=(envList[j]-meanEnv)*(envList[j]-meanEnv);
   float stdevEnv = sqrt(sq_sum/(float)(envList.size()-1));
   featList.push_back(meanEnv);
-  featList.push_back(stdevEnv);
+  //featList.push_back(stdevEnv);
 }
 
-void TimeFeatures::featJerk(vector<float>& data)
+void TimeFeatures::featAutoCorr(vector<float> &data)
 {
-  
+  size_t numSamples = data.size();
+  vector<float> corrList;
+  for (size_t i=0; i<numSamples; i=i+hopSize)
+  {
+    if(i+blockSize-1>=numSamples)
+      break;
+    else
+    {
+      float tempCorr = 0;
+      float tempVar = 0;
+      vector<float>::const_iterator first = data.begin()+i;
+      vector<float>::const_iterator last = data.begin()+i+blockSize;
+      vector<float> temp(first,last);
+      float tempMean = getSum(temp)/temp.size();
+      for (int j = 0; j<temp.size(); j++)
+      {
+        float oneVar = (temp[j]-tempMean) * (temp[j]-tempMean);
+        tempVar+=oneVar;
+      }
+      for (int j = 0; j<temp.size(); j++)
+      {
+        tempCorr+=(temp[j]-tempMean)*(temp[j]-tempMean)/tempVar;
+      }
+      corrList.push_back(tempCorr);
+    }
+  }
+  float meanCorr = getSum(corrList)/corrList.size();
+  featList.push_back(meanCorr);
 }
 
 void TimeFeatures :: featSkewAndKurt(vector<float>& data)

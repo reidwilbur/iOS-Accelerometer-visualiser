@@ -34,7 +34,7 @@ public:
   void featEnv(vector<float>& data);
   void featRms(vector<float>& data);
   void featSkewAndKurt(vector<float>& data);
-  void featJerk(vector<float>& data);
+  void featAutoCorr(vector<float>& data);
   void normalization(vector<float>& data); 
   float getMax(vector<float>& data, int start = 0, int end = 0);
   float getMin(vector<float>& data, int start = 0, int end = 0);
