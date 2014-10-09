@@ -14,6 +14,7 @@
 
 #include <stdio.h>
 #include <vector>
+
 using namespace std;
 
 #endif /* defined(__Accelerometer__Feature__) */

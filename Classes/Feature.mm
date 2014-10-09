@@ -6,6 +6,7 @@
 //
 //
 #include "Feature.h"
+#include "TimeFeatures.h"
 using namespace std;
 #define MIN(a,b)    ((a) < (b) ? (a) : (b))
 #define MAX(a,b)    ((a) > (b) ? (a) : (b))
@@ -131,6 +132,9 @@ vector<float> Feature::getTotalFeature(vector<vector<float> > input){
     vector<float> a = getPeakFeature(thirdD);
     vector<float> b = getPeakFeature(fourthD);
     a.insert( a.end(), b.begin(), b.end() );
+//    TimeFeatures timeFeatures;
+//    vector<double> timeFeatList = timeFeatures.getFeatures(input);
+//    a.insert(a.end(),timeFeatList.begin(), tineFeatList.end());
     return a;
 }
 
