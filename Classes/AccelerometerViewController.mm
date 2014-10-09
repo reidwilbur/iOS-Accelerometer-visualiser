@@ -36,7 +36,7 @@ using namespace std;
   [self clearData];
 
   [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion *motion, NSError *error) {
-    if ([self.plots count] < 256) {
+    if ([self.plots count] <= 256) {
       [self.plots insertObject:motion atIndex:0];
       [[self view] setNeedsDisplay];
     }
