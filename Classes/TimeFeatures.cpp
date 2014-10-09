@@ -22,10 +22,10 @@ vector<float> TimeFeatures::getFeatures(vector<vector<float> > data)
   for (int i = 0; i<data.size(); i++)   // calculate the features per dimension
   {
     oneDimensionData=data[i];
+    featEnv(oneDimensionData);
     normalization(oneDimensionData);
     featZcr(oneDimensionData);
     featRms(oneDimensionData);
-    featEnv(oneDimensionData);
     featSkewAndKurt(oneDimensionData);
     featAutoCorr(oneDimensionData);
   }
