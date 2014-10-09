@@ -188,6 +188,8 @@ CvSVMParams getConfiguredSVMParams(){
     
 //    svm.load([modelPath cString]);
 //    float result = svm.predict(labels);
+    NSString *message= @"Traning done!";
+    predictResult.text = message;
     printf("Training done!\n");
     
     
