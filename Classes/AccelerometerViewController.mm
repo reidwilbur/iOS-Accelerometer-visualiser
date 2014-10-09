@@ -133,7 +133,7 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
 CvSVMParams getConfiguredSVMParams(){
     CvSVMParams params;
     params.svm_type = CvSVM::C_SVC;
-    params.kernel_type = CvSVM::LINEAR;
+    params.kernel_type = CvSVM::POLY;
     params.gamma = 20;
     params.degree = 1;
     params.coef0 = 0;
