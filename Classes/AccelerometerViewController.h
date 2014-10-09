@@ -26,6 +26,7 @@
 -(IBAction)save;
 -(IBAction)deleteAll;
 -(IBAction)train;
+-(IBAction)predict;
 
 
 @end

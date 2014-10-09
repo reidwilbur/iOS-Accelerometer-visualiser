@@ -22,6 +22,7 @@
 		C30FF79819E4E6970065FB9E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C30FF79719E4E6960065FB9E /* Accelerate.framework */; };
 		C30FF79A19E594A20065FB9E /* MotionFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = C30FF79919E594A20065FB9E /* MotionFilter.m */; };
 		C30FF79C19E5D7F20065FB9E /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C30FF77A19E47FB40065FB9E /* opencv2.framework */; };
+		C30FF79F19E641F60065FB9E /* Feature.mm in Sources */ = {isa = PBXBuildFile; fileRef = C30FF79D19E641F60065FB9E /* Feature.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -48,6 +49,8 @@
 		C30FF79719E4E6960065FB9E /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		C30FF79919E594A20065FB9E /* MotionFilter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MotionFilter.m; sourceTree = "<group>"; };
 		C30FF79B19E594D40065FB9E /* MotionFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MotionFilter.h; sourceTree = "<group>"; };
+		C30FF79D19E641F60065FB9E /* Feature.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Feature.mm; sourceTree = "<group>"; };
+		C30FF79E19E641F60065FB9E /* Feature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feature.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +83,8 @@
 				5753F0D012CA211200BD7A66 /* GraphView.mm */,
 				C30FF79319E4E2860065FB9E /* FFT.cpp */,
 				C30FF79419E4E2860065FB9E /* FFT.h */,
+				C30FF79D19E641F60065FB9E /* Feature.mm */,
+				C30FF79E19E641F60065FB9E /* Feature.h */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -207,6 +212,7 @@
 				C30FF79519E4E2860065FB9E /* FFT.cpp in Sources */,
 				1D3623260D0F684500981E51 /* AccelerometerAppDelegate.m in Sources */,
 				28D7ACF80DDB3853001CB0EB /* AccelerometerViewController.mm in Sources */,
+				C30FF79F19E641F60065FB9E /* Feature.mm in Sources */,
 				5753F0D112CA211200BD7A66 /* GraphView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

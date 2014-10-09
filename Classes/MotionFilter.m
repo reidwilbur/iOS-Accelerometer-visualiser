@@ -148,6 +148,7 @@ double Clamp(double v, double min, double max)
     lastRZ = motion.rotationRate.z;
 }
 
+
 - (NSString *)name
 {
     return adaptive ? @"Adaptive Highpass Filter" : @"Highpass Filter";

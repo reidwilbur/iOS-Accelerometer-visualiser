@@ -7,6 +7,7 @@
 //
 
 #import "GraphView.h"
+#import "Feature.h"
 
 using namespace std;
 
@@ -52,7 +53,7 @@ using namespace std;
 	CGFloat green[4] = {0.0f, 1.0f, 0.0f, 1.0f};
 	CGFloat red[4] = {1.0f, 0.0f, 0.0f, 1.0f};
 	CGFloat blue[4] = {0.0f, 0.0f, 1.0f, 1.0f};
-  CGFloat yellow[4] = {1.0f,1.0f,0.0f,1.0f};
+    CGFloat yellow[4] = {1.0f,1.0f,0.0f,1.0f};
 	CGFloat white[4] = {1.0f, 1.0f, 1.0f, 1.0f};
 	
 	//draw axis
@@ -89,56 +90,34 @@ using namespace std;
 	
 	
     if(currentVC.plots.count >5){
-    vector<vector<float> > signal2D = to2Dvector(currentVC.plots);
-    vector<vector<float> > firstD = derivative(signal2D);
-    vector<vector<float> > secondD = derivative(firstD);
-    vector<vector<float> > thirdD = derivative(secondD);
-    vector<vector<float> > fourthD = derivative(thirdD);
+        vector<vector<float> > signal2D = Feature::to2Dvector(currentVC.plots);
+        vector<vector<float> > filteredSignal2D = Feature::highpassFilter(currentVC.plots);
+        vector<vector<float> > firstD = Feature::derivative(filteredSignal2D);
+        vector<vector<float> > secondD = Feature::derivative(firstD);
+        vector<vector<float> > thirdD = Feature::derivative(secondD);
+        vector<vector<float> > fourthD = Feature::derivative(thirdD);
+        
+        
+        vector<float> feature = Feature::getTotalFeature(signal2D);
+        std::copy(feature.begin(), feature.end(), std::ostream_iterator<float>(std::cout, " "));
+        cout<<endl;
 
-		
-	//plot points
-    //rot rate x
-	CGContextBeginPath(c);
-	CGContextSetStrokeColor(c, red);
-	CGContextSetFillColor(c, red);
-    
-    CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
+        
+        //plot points
+        //rot rate x
+        CGContextBeginPath(c);
+        CGContextSetStrokeColor(c, red);
+        CGContextSetFillColor(c, red);
+        
+        CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
         for (int i=1; i<fourthD.at(0).size(); i++) {
             if ((25+i) < _AXIS_LENGTH_X) {
                 CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*fourthD[3][i]));
             }
         }
-    
-	CGContextStrokePath(c);
+        
+        CGContextStrokePath(c);
     }
-//	//rot rate y
-//	CGContextBeginPath(c);
-//	CGContextSetStrokeColor(c, blue);
-//	CGContextSetFillColor(c, blue);
-//	
-//    CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
-//    for (int i=1; i<[currentVC.plots count]; i++) {
-//        if ((25+i) < _AXIS_LENGTH_X) {
-//            CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
-//            CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*a.rotationRate.y));
-//        }
-//    }	
-//	CGContextStrokePath(c);
-//	
-//	//rot rate z
-//	CGContextBeginPath(c);
-//	CGContextSetStrokeColor(c, green);
-//	CGContextSetFillColor(c, green);
-//	
-//    CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
-//    for (int i=1; i<[currentVC.plots count]; i++) {
-//        if ((25+i) < _AXIS_LENGTH_X) {
-//            CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
-//            CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*a.rotationRate.z));
-//        }
-//    }
-//	CGContextStrokePath(c);
-
     
     
     //Number of Samples for input(time domain)/output(frequency domain)
@@ -194,47 +173,6 @@ using namespace std;
 }
 
 
-vector<vector<float> > to2Dvector(NSMutableArray *plots){
-    vector<vector<float> > result;
-    int size = [plots count];
-    vector<float> x(size);
-    vector<float> y(size);
-    vector<float> z(size);
-    vector<float> rx(size);
-    vector<float> ry(size);
-    vector<float> rz(size);
-
-    for (int i=1; i<[plots count]; i++) {
-        CMDeviceMotion *a = [plots objectAtIndex:i];
-        x.at(i)=(a.userAcceleration.x);
-        y.at(i)=(a.userAcceleration.y);
-        z.at(i)=(a.userAcceleration.z);
-        rx.at(i)=(a.rotationRate.x);
-        ry.at(i)=(a.rotationRate.y);
-        rz.at(i)=(a.rotationRate.z);
-    }
-    result.push_back(x);
-    result.push_back(y);
-    result.push_back(z);
-    result.push_back(rx);
-    result.push_back(ry);
-    result.push_back(rz);
-    return result;
-}
-
-
-vector<vector<float> > derivative(vector<vector<float> > input){
-    vector<vector<float> > result;
-    
-    for(int i = 0; i<input.size(); ++i){
-        vector<float> d (input[i].size(),0.0);
-        for(int j = 0; j<input[i].size()-1; ++j){
-            d.at(j) = input[i][j+1]-input[i][j];
-        }
-        result.push_back(d);
-    }
-    return result;
-}
 
 
 - (void)dealloc {
