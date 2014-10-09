@@ -29,21 +29,21 @@ class TimeFeatures
 public:
   TimeFeatures();
   ~TimeFeatures();
-  vector<double> getFeatures(vector<vector<double> > data);
-  void featZcr(vector<double>& data);
-  void featEnv(vector<double>& data);
-  void featRms(vector<double>& data);
-  void featSkewAndKurt(vector<double>& data);
-  void featJerk(vector<double>& data);
-  void normalization(vector<double>& data); 
-  double getMax(vector<double>& data, int start = 0, int end = 0);
-  double getMin(vector<double>& data, int start = 0, int end = 0);
-  double getSum(vector<double>& data);
+  vector<float> getFeatures(vector<vector<float> > data);
+  void featZcr(vector<float>& data);
+  void featEnv(vector<float>& data);
+  void featRms(vector<float>& data);
+  void featSkewAndKurt(vector<float>& data);
+  void featJerk(vector<float>& data);
+  void normalization(vector<float>& data); 
+  float getMax(vector<float>& data, int start = 0, int end = 0);
+  float getMin(vector<float>& data, int start = 0, int end = 0);
+  float getSum(vector<float>& data);
 private:
   const int sampleRate = 100;
   const int blockSize = 32;
   const int hopSize = 16;
-  vector<double> oneDimensionData;
-  vector<double> featList;
+  vector<float> oneDimensionData;
+  vector<float> featList;
 };
 #endif /* defined(__HackOnData__TimeFeatures__) */
