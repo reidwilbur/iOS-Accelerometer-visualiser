@@ -154,17 +154,20 @@ CvSVMParams getConfiguredSVMParams(){
 {
   
     NSString *filePath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"capture2.data"];
-    std::vector<std::vector<float> > raw;
+    std::vector<std::vector<float> > features;
     std::vector<float> label;
-    getDataFromFile(filePath, raw, label);
+    getDataFromFile(filePath, features, label);
     
     CvSVMParams params = getConfiguredSVMParams();
     
     CvSVM svm;
     
-    size_t N = raw.size();
-    size_t M = raw[0].size();
+    size_t N = features.size();
+    size_t M = features[0].size();
     int sz[] = {N, M};
+    
+    std::cout << N << " x "  << M << std::endl;
+
     
     cv::Mat training_mat = cv::Mat(2, sz, CV_32F);
     
@@ -172,7 +175,7 @@ CvSVMParams getConfiguredSVMParams(){
     {
         for(int j=0;j<M;j++)
         {
-            training_mat.at<float>(i, j) = raw[i][j];
+            training_mat.at<float>(i, j) = features[i][j];
         }
     }
     

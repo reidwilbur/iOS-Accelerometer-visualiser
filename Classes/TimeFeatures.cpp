@@ -194,7 +194,7 @@ float TimeFeatures::getSum(vector<float>& tempData)
 
 float TimeFeatures::getMax(vector<float>& tempData, int start, int end)
 {
-  float max = 0;
+  float max = -1000;
   if (start >= end)
   {
     for (int i=0; i<tempData.size(); i++)

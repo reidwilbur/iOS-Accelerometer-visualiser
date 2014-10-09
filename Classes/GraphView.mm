@@ -94,7 +94,7 @@ using namespace std;
         vector<vector<float> > thirdD = Feature::derivative(secondD);
         vector<vector<float> > fourthD = Feature::derivative(thirdD);
         
-        if(currentVC.plots.count >=255){
+        if(currentVC.plots.count ==256){
             vector<float> feature = Feature::getTotalFeature(signal2D);
             std::copy(feature.begin(), feature.end(), std::ostream_iterator<float>(std::cout, " "));
             cout<<endl;
