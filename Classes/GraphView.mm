@@ -8,6 +8,8 @@
 
 #import "GraphView.h"
 
+using namespace std;
+
 #define _AXIS_ORIGIN_X 20
 #define _AXIS_ORIGIN_Y 225
 #define _AXIS_LENGTH_X 460
@@ -86,6 +88,13 @@
 	CGContextStrokePath(c);
 	
 	
+    if(currentVC.plots.count >5){
+    vector<vector<float> > signal2D = to2Dvector(currentVC.plots);
+    vector<vector<float> > firstD = derivative(signal2D);
+    vector<vector<float> > secondD = derivative(firstD);
+    vector<vector<float> > thirdD = derivative(secondD);
+    vector<vector<float> > fourthD = derivative(thirdD);
+
 		
 	//plot points
     //rot rate x
@@ -94,44 +103,41 @@
 	CGContextSetFillColor(c, red);
     
     CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
-    for (int i=1; i<[currentVC.plots count]; i++) {
-        if ((25+i) < _AXIS_LENGTH_X) {
-            CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
-            //high pass for x
-            [self.filter addMotion:a];
-            CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*self.filter.rx));
-            //CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*a.rotationRate.x));
+        for (int i=1; i<fourthD.at(0).size(); i++) {
+            if ((25+i) < _AXIS_LENGTH_X) {
+                CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*fourthD[3][i]));
+            }
         }
-    }	
+    
 	CGContextStrokePath(c);
-	
-	//rot rate y
-	CGContextBeginPath(c);
-	CGContextSetStrokeColor(c, blue);
-	CGContextSetFillColor(c, blue);
-	
-    CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
-    for (int i=1; i<[currentVC.plots count]; i++) {
-        if ((25+i) < _AXIS_LENGTH_X) {
-            CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
-            CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*a.rotationRate.y));
-        }
-    }	
-	CGContextStrokePath(c);
-	
-	//rot rate z
-	CGContextBeginPath(c);
-	CGContextSetStrokeColor(c, green);
-	CGContextSetFillColor(c, green);
-	
-    CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
-    for (int i=1; i<[currentVC.plots count]; i++) {
-        if ((25+i) < _AXIS_LENGTH_X) {
-            CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
-            CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*a.rotationRate.z));
-        }
     }
-	CGContextStrokePath(c);
+//	//rot rate y
+//	CGContextBeginPath(c);
+//	CGContextSetStrokeColor(c, blue);
+//	CGContextSetFillColor(c, blue);
+//	
+//    CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
+//    for (int i=1; i<[currentVC.plots count]; i++) {
+//        if ((25+i) < _AXIS_LENGTH_X) {
+//            CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
+//            CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*a.rotationRate.y));
+//        }
+//    }	
+//	CGContextStrokePath(c);
+//	
+//	//rot rate z
+//	CGContextBeginPath(c);
+//	CGContextSetStrokeColor(c, green);
+//	CGContextSetFillColor(c, green);
+//	
+//    CGContextMoveToPoint(c, 20.0f, _AXIS_ORIGIN_Y);
+//    for (int i=1; i<[currentVC.plots count]; i++) {
+//        if ((25+i) < _AXIS_LENGTH_X) {
+//            CMDeviceMotion *a = [currentVC.plots objectAtIndex:i];
+//            CGContextAddLineToPoint(c, _AXIS_ORIGIN_X+i, _AXIS_ORIGIN_Y - (80*a.rotationRate.z));
+//        }
+//    }
+//	CGContextStrokePath(c);
 
     
     
@@ -185,6 +191,49 @@
 //    
 //    delete(fftAccel);
 
+}
+
+
+vector<vector<float> > to2Dvector(NSMutableArray *plots){
+    vector<vector<float> > result;
+    int size = [plots count];
+    vector<float> x(size);
+    vector<float> y(size);
+    vector<float> z(size);
+    vector<float> rx(size);
+    vector<float> ry(size);
+    vector<float> rz(size);
+
+    for (int i=1; i<[plots count]; i++) {
+        CMDeviceMotion *a = [plots objectAtIndex:i];
+        x.at(i)=(a.userAcceleration.x);
+        y.at(i)=(a.userAcceleration.y);
+        z.at(i)=(a.userAcceleration.z);
+        rx.at(i)=(a.rotationRate.x);
+        ry.at(i)=(a.rotationRate.y);
+        rz.at(i)=(a.rotationRate.z);
+    }
+    result.push_back(x);
+    result.push_back(y);
+    result.push_back(z);
+    result.push_back(rx);
+    result.push_back(ry);
+    result.push_back(rz);
+    return result;
+}
+
+
+vector<vector<float> > derivative(vector<vector<float> > input){
+    vector<vector<float> > result;
+    
+    for(int i = 0; i<input.size(); ++i){
+        vector<float> d (input[i].size(),0.0);
+        for(int j = 0; j<input[i].size()-1; ++j){
+            d.at(j) = input[i][j+1]-input[i][j];
+        }
+        result.push_back(d);
+    }
+    return result;
 }
 
 
