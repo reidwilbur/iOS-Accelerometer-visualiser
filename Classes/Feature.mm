@@ -8,13 +8,11 @@
 #include "Feature.h"
 #include "TimeFeatures.h"
 using namespace std;
-#define MIN(a,b)    ((a) < (b) ? (a) : (b))
-#define MAX(a,b)    ((a) > (b) ? (a) : (b))
 
 
 vector<vector<float> > Feature::to2Dvector(NSMutableArray *plots){
     vector<vector<float> > result;
-    int size = [plots count];
+    int size = (int)[plots count];
     vector<float> x(size);
     vector<float> y(size);
     vector<float> z(size);
@@ -57,7 +55,7 @@ vector<vector<float> > Feature::derivative(vector<vector<float> > input){
 vector<vector<float> > Feature::highpassFilter(NSMutableArray *plots){
     HighpassFilter *filter = [[HighpassFilter alloc] initWithSampleRate:60 cutoffFrequency:5.0];
     vector<vector<float> > result;
-    int size = [plots count];
+    int size = (int)[plots count];
     vector<float> x(size);
     vector<float> y(size);
     vector<float> z(size);
@@ -90,12 +88,12 @@ vector<float> Feature::getPeakFeature(vector<vector<float> > input){
     float maxX = *max_element(input[0].begin(), input[0].end());
     float maxY = *max_element(input[1].begin(), input[1].end());
     float maxZ = *max_element(input[2].begin(), input[2].end());
-    float maxA = MAX(MAX(maxX, maxY),maxZ);
+    float maxA = fmaxf(fmaxf(maxX, maxY),maxZ);
     
     float maxRX = *max_element(input[3].begin(), input[3].end());
     float maxRY = *max_element(input[4].begin(), input[4].end());
     float maxRZ = *max_element(input[5].begin(), input[5].end());
-    float maxR = MAX(MAX(maxRX, maxRY),maxRZ);
+    float maxR = fmaxf(fmaxf(maxRX, maxRY),maxRZ);
 
     result.push_back(getNumberOverThresh(input[0],maxA));
     result.push_back(getNumberOverThresh(input[1],maxA));

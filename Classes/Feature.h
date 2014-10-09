@@ -21,7 +21,6 @@ using namespace std;
 
 #ifdef __cplusplus
 
-
 class Feature
 {
     

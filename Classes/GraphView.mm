@@ -16,9 +16,6 @@ using namespace std;
 #define _AXIS_LENGTH_X 460
 #define _AXIS_LENGTH_Y -135
 
-#define MIN(a,b)    ((a) < (b) ? (a) : (b))
-#define MAX(a,b)    ((a) > (b) ? (a) : (b))
-
 @implementation GraphView
 @synthesize currentVC;
 

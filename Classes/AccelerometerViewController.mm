@@ -3,7 +3,7 @@
 
 
 @implementation AccelerometerViewController
-@synthesize plots, dataFilePath;
+@synthesize plots, dataFilePath, modelPath;
 
 using namespace std;
 
@@ -12,6 +12,7 @@ using namespace std;
     [super viewDidLoad];
     
   self.dataFilePath = [[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"capture2.data"];
+  self.modelPath = [[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"svm_model"];
 
   self.motionManager = [[CMMotionManager alloc] init];
   self.motionManager.deviceMotionUpdateInterval = 0.01;
@@ -74,6 +75,7 @@ using namespace std;
 {
 	self.plots = [NSMutableArray arrayWithCapacity:BUFFER_SIZE];
   gestureName.text = @"";
+  predictResult.text = @"";
 	[[self view] setNeedsDisplay];
 }
 
@@ -88,56 +90,47 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
             //NSLog(@"line: %@", line);
             NSArray *array = [line componentsSeparatedByString:@"|"];
             std::string label =[[array objectAtIndex:0] UTF8String];
-
-
             
-            if(label=="1" || label=="2" || label=="3"){
-                labels.push_back(stof(label));
-                
-                vector<vector<float> > raw;
-                vector<float> x;
-                vector<float> y;
-                vector<float> z;
-                vector<float> rx;
-                vector<float> ry;
-                vector<float> rz;
-                
-                for( int i=1;i<[array count]; ++i){
-                    NSString* tick = [array objectAtIndex:i];
-                    NSArray * dofs = [tick componentsSeparatedByString:@","];
-                    //printf("%s\n",[tick UTF8String]);
-                    if([dofs count]>=6){
+            
+            
+            labels.push_back(stof(label));
+            
+            vector<vector<float> > raw;
+            vector<float> x;
+            vector<float> y;
+            vector<float> z;
+            vector<float> rx;
+            vector<float> ry;
+            vector<float> rz;
+            
+            for( int i=1;i<[array count]; ++i){
+                NSString* tick = [array objectAtIndex:i];
+                NSArray * dofs = [tick componentsSeparatedByString:@","];
+                //printf("%s\n",[tick UTF8String]);
+                if([dofs count]>=6){
                     x.push_back(stof([[dofs objectAtIndex:1] UTF8String]));
                     y.push_back(stof([[dofs objectAtIndex:2] UTF8String]));
                     z.push_back(stof([[dofs objectAtIndex:3] UTF8String]));
                     rx.push_back(stof([[dofs objectAtIndex:4] UTF8String]));
                     ry.push_back(stof([[dofs objectAtIndex:5] UTF8String]));
                     rz.push_back(stof([[dofs objectAtIndex:6] UTF8String]));
-                    }
                 }
-                raw.push_back(x);
-                raw.push_back(y);
-                raw.push_back(z);
-                raw.push_back(rx);
-                raw.push_back(ry);
-                raw.push_back(rz);
-                vector<float> feature = Feature::getTotalFeature(raw);
-                data.push_back(feature);
             }
+            raw.push_back(x);
+            raw.push_back(y);
+            raw.push_back(z);
+            raw.push_back(rx);
+            raw.push_back(ry);
+            raw.push_back(rz);
+            vector<float> feature = Feature::getTotalFeature(raw);
+            data.push_back(feature);
+            
         }
     }
 }
 
 
-
--(IBAction)train
-{
-  
-    NSString *filePath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"capture2.data"];
-    std::vector<std::vector<float> > raw;
-    std::vector<float> label;
-    getDataFromFile(filePath, raw, label);
-    
+CvSVMParams getConfiguredSVMParams(){
     CvSVMParams params;
     params.svm_type = CvSVM::C_SVC;
     params.kernel_type = CvSVM::LINEAR;
@@ -153,12 +146,25 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
     params.term_crit.type = CV_TERMCRIT_ITER +CV_TERMCRIT_EPS;
     params.term_crit.max_iter = 1000;
     params.term_crit.epsilon = 1e-6;
+    return params;
+}
+
+
+-(IBAction)train
+{
+  
+    NSString *filePath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"capture2.data"];
+    std::vector<std::vector<float> > raw;
+    std::vector<float> label;
+    getDataFromFile(filePath, raw, label);
+    
+    CvSVMParams params = getConfiguredSVMParams();
     
     CvSVM svm;
     
-    int N = raw.size();
-    int M = raw[0].size();
-    int sz[] = {raw.size(),raw[0].size()};
+    size_t N = raw.size();
+    size_t M = raw[0].size();
+    int sz[] = {N, M};
     
     cv::Mat training_mat = cv::Mat(2, sz, CV_32F);
     
@@ -170,7 +176,7 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
         }
     }
     
-    cv::Mat labels = cv::Mat(1,label.size(),CV_32F, &label[0]);
+    cv::Mat labels = cv::Mat(1,(int)label.size(),CV_32F, &label[0]);
     
     std::cout << "Data = "<< std::endl << " "  << training_mat << std::endl << std::endl;
     std::cout << "Label = "<< std::endl << " "  << labels << std::endl << std::endl;
@@ -178,9 +184,7 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
     
     svm.train(training_mat, labels, cv::Mat(), cv::Mat(), params);
     
-    NSString *modelPath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"svm_model"];
-
-    svm.save([modelPath cString]);
+    svm.save([self.modelPath UTF8String]);
     
 //    svm.load([modelPath cString]);
 //    float result = svm.predict(labels);
@@ -190,33 +194,20 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
 }
 
 -(IBAction)predict{
-    CvSVMParams params;
-    params.svm_type = CvSVM::C_SVC;
-    params.kernel_type = CvSVM::POLY;
-    params.gamma = 20;
-    params.degree = 1;
-    params.coef0 = 0;
-    
-    params.C = 7;
-    params.nu = 0.0;
-    params.p = 0.0;
-    
-    params.class_weights = NULL;
-    params.term_crit.type = CV_TERMCRIT_ITER +CV_TERMCRIT_EPS;
-    params.term_crit.max_iter = 1000;
-    params.term_crit.epsilon = 1e-6;
+    CvSVMParams params = getConfiguredSVMParams();
     
     CvSVM svm;
     
-    NSString *modelPath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"svm_model"];
-    svm.load([modelPath cString]);
+    svm.load([self.modelPath UTF8String]);
     if([self.plots count]!=0){
-    vector<vector<float> > raw= Feature::to2Dvector(self.plots);
-    vector<float> feature= Feature::getTotalFeature(raw);
-    cv::Mat featureMat = cv::Mat(1,feature.size(),CV_32F, &feature[0]);;
+      vector<vector<float> > raw= Feature::to2Dvector(self.plots);
+      vector<float> feature= Feature::getTotalFeature(raw);
+      cv::Mat featureMat = cv::Mat(1,(int)feature.size(),CV_32F, &feature[0]);;
 
-    float result = svm.predict(featureMat);
-    printf("result %f\n",result);
+      float result = svm.predict(featureMat);
+      NSString *strResult = [NSString stringWithFormat:@"result %f",result];
+      NSLog(@"%@",strResult);
+      predictResult.text = strResult;
     }
 }
 
@@ -229,27 +220,38 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
   return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
--(IBAction)deleteAll
+-(IBAction)deleteData
+{
+  [self deleteFile:self.dataFilePath];
+}
+
+-(IBAction)deleteModel
+{
+  [self deleteFile:self.modelPath];
+}
+
+-(void)deleteFile:(NSString *)file
 {
   NSFileManager *fileManager = [NSFileManager defaultManager];
   BOOL success = false;
   NSError *error;
 
-  if ([fileManager fileExistsAtPath:self.dataFilePath]) {
-    success = [fileManager removeItemAtPath:self.dataFilePath error:&error];
+  if ([fileManager fileExistsAtPath:file]) {
+    success = [fileManager removeItemAtPath:file error:&error];
     if (success) {
-      NSString *msg = [NSString stringWithFormat:@"Deleted file %@", self.dataFilePath];
+      NSString *msg = [NSString stringWithFormat:@"Deleted file %@", file];
       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success" message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
       [alert show];
       [alert release];
     }
     else {
-      NSString *msg = [NSString stringWithFormat:@"Could not delete %@", self.dataFilePath];
+      NSString *msg = [NSString stringWithFormat:@"Could not delete %@", file];
       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
       [alert show];
       [alert release];
     }
   }
+
 }
 
 -(IBAction)save
