@@ -94,11 +94,11 @@ using namespace std;
         vector<vector<float> > thirdD = Feature::derivative(secondD);
         vector<vector<float> > fourthD = Feature::derivative(thirdD);
         
-        
-        vector<float> feature = Feature::getTotalFeature(signal2D);
-        std::copy(feature.begin(), feature.end(), std::ostream_iterator<float>(std::cout, " "));
-        cout<<endl;
-
+        if(currentVC.plots.count >=255){
+            vector<float> feature = Feature::getTotalFeature(signal2D);
+            std::copy(feature.begin(), feature.end(), std::ostream_iterator<float>(std::cout, " "));
+            cout<<endl;
+        }
         
         //plot points
         //rot rate x
