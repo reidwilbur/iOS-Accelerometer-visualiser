@@ -150,7 +150,8 @@ void TimeFeatures::featAutoCorr(vector<float> &data)
       }
       for (int j = 0; j<temp.size(); j++)
       {
-        tempCorr+=(temp[j]-tempMean)*(temp[j]-tempMean)/tempVar;
+        //tempCorr+=(temp[j]-tempMean)*(temp[j]-tempMean)/tempVar;
+        tempCorr+=temp[j]*temp[j]/tempVar;
       }
       corrList.push_back(tempCorr);
     }
