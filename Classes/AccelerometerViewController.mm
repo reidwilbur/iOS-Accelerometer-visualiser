@@ -74,6 +74,7 @@ using namespace std;
 {
 	self.plots = [NSMutableArray arrayWithCapacity:BUFFER_SIZE];
   gestureName.text = @"";
+  predictResult.text = @"";
 	[[self view] setNeedsDisplay];
 }
 
@@ -156,9 +157,9 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
     
     CvSVM svm;
     
-    int N = raw.size();
-    int M = raw[0].size();
-    int sz[] = {raw.size(),raw[0].size()};
+    size_t N = raw.size();
+    size_t M = raw[0].size();
+    int sz[] = {(int)raw.size(),(int)raw[0].size()};
     
     cv::Mat training_mat = cv::Mat(2, sz, CV_32F);
     
@@ -170,7 +171,7 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
         }
     }
     
-    cv::Mat labels = cv::Mat(1,label.size(),CV_32F, &label[0]);
+    cv::Mat labels = cv::Mat(1,(int)label.size(),CV_32F, &label[0]);
     
     std::cout << "Data = "<< std::endl << " "  << training_mat << std::endl << std::endl;
     std::cout << "Label = "<< std::endl << " "  << labels << std::endl << std::endl;
@@ -180,7 +181,7 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
     
     NSString *modelPath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"svm_model"];
 
-    svm.save([modelPath cString]);
+    svm.save([modelPath UTF8String]);
     
 //    svm.load([modelPath cString]);
 //    float result = svm.predict(labels);
@@ -209,14 +210,16 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
     CvSVM svm;
     
     NSString *modelPath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"svm_model"];
-    svm.load([modelPath cString]);
+    svm.load([modelPath UTF8String]);
     if([self.plots count]!=0){
-    vector<vector<float> > raw= Feature::to2Dvector(self.plots);
-    vector<float> feature= Feature::getTotalFeature(raw);
-    cv::Mat featureMat = cv::Mat(1,feature.size(),CV_32F, &feature[0]);;
+      vector<vector<float> > raw= Feature::to2Dvector(self.plots);
+      vector<float> feature= Feature::getTotalFeature(raw);
+      cv::Mat featureMat = cv::Mat(1,(int)feature.size(),CV_32F, &feature[0]);;
 
-    float result = svm.predict(featureMat);
-    printf("result %f\n",result);
+      float result = svm.predict(featureMat);
+      NSString *strResult = [NSString stringWithFormat:@"result %f",result];
+      NSLog(@"%@",strResult);
+      predictResult.text = strResult;
     }
 }
 

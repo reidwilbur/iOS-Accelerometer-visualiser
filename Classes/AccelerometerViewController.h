@@ -14,6 +14,7 @@
 
 @interface AccelerometerViewController : UIViewController <UIAccelerometerDelegate>{
   IBOutlet UITextField *gestureName;
+  IBOutlet UITextField *predictResult;
 	NSMutableArray *plots;
   NSString *dataFilePath;
 }
