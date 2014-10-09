@@ -39,20 +39,16 @@
   [self clearData];
 
   [self.motionManager startDeviceMotionUpdatesToQueue:[NSOperationQueue currentQueue] withHandler:^(CMDeviceMotion *motion, NSError *error) {
-    [self.plots insertObject:motion atIndex:0];
-    [[self view] setNeedsDisplay];
-    if ([self.plots count] == 256) {
-      [self endCapture];
+    if ([self.plots count] < 256) {
+      [self.plots insertObject:motion atIndex:0];
+      [[self view] setNeedsDisplay];
+    }
+    else {
+      [self.motionManager stopDeviceMotionUpdates];
     }
   }];
 
 //  [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(endCapture:) userInfo:[timer userInfo] repeats:NO];
-}
-
-- (void)endCapture
-{
-  [self.motionManager stopDeviceMotionUpdates];
-  NSLog(@"End captured");
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation
