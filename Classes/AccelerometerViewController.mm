@@ -90,56 +90,47 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
             //NSLog(@"line: %@", line);
             NSArray *array = [line componentsSeparatedByString:@"|"];
             std::string label =[[array objectAtIndex:0] UTF8String];
-
-
             
-            if(label=="1" || label=="2" || label=="3"){
-                labels.push_back(stof(label));
-                
-                vector<vector<float> > raw;
-                vector<float> x;
-                vector<float> y;
-                vector<float> z;
-                vector<float> rx;
-                vector<float> ry;
-                vector<float> rz;
-                
-                for( int i=1;i<[array count]; ++i){
-                    NSString* tick = [array objectAtIndex:i];
-                    NSArray * dofs = [tick componentsSeparatedByString:@","];
-                    //printf("%s\n",[tick UTF8String]);
-                    if([dofs count]>=6){
+            
+            
+            labels.push_back(stof(label));
+            
+            vector<vector<float> > raw;
+            vector<float> x;
+            vector<float> y;
+            vector<float> z;
+            vector<float> rx;
+            vector<float> ry;
+            vector<float> rz;
+            
+            for( int i=1;i<[array count]; ++i){
+                NSString* tick = [array objectAtIndex:i];
+                NSArray * dofs = [tick componentsSeparatedByString:@","];
+                //printf("%s\n",[tick UTF8String]);
+                if([dofs count]>=6){
                     x.push_back(stof([[dofs objectAtIndex:1] UTF8String]));
                     y.push_back(stof([[dofs objectAtIndex:2] UTF8String]));
                     z.push_back(stof([[dofs objectAtIndex:3] UTF8String]));
                     rx.push_back(stof([[dofs objectAtIndex:4] UTF8String]));
                     ry.push_back(stof([[dofs objectAtIndex:5] UTF8String]));
                     rz.push_back(stof([[dofs objectAtIndex:6] UTF8String]));
-                    }
                 }
-                raw.push_back(x);
-                raw.push_back(y);
-                raw.push_back(z);
-                raw.push_back(rx);
-                raw.push_back(ry);
-                raw.push_back(rz);
-                vector<float> feature = Feature::getTotalFeature(raw);
-                data.push_back(feature);
             }
+            raw.push_back(x);
+            raw.push_back(y);
+            raw.push_back(z);
+            raw.push_back(rx);
+            raw.push_back(ry);
+            raw.push_back(rz);
+            vector<float> feature = Feature::getTotalFeature(raw);
+            data.push_back(feature);
+            
         }
     }
 }
 
 
-
--(IBAction)train
-{
-  
-    NSString *filePath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"capture2.data"];
-    std::vector<std::vector<float> > raw;
-    std::vector<float> label;
-    getDataFromFile(filePath, raw, label);
-    
+CvSVMParams getConfiguredSVMParams(){
     CvSVMParams params;
     params.svm_type = CvSVM::C_SVC;
     params.kernel_type = CvSVM::LINEAR;
@@ -155,12 +146,25 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
     params.term_crit.type = CV_TERMCRIT_ITER +CV_TERMCRIT_EPS;
     params.term_crit.max_iter = 1000;
     params.term_crit.epsilon = 1e-6;
+    return params;
+}
+
+
+-(IBAction)train
+{
+  
+    NSString *filePath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"capture2.data"];
+    std::vector<std::vector<float> > raw;
+    std::vector<float> label;
+    getDataFromFile(filePath, raw, label);
+    
+    CvSVMParams params = getConfiguredSVMParams();
     
     CvSVM svm;
     
     size_t N = raw.size();
     size_t M = raw[0].size();
-    int sz[] = {(int)raw.size(),(int)raw[0].size()};
+    int sz[] = {N, M};
     
     cv::Mat training_mat = cv::Mat(2, sz, CV_32F);
     
@@ -190,21 +194,7 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
 }
 
 -(IBAction)predict{
-    CvSVMParams params;
-    params.svm_type = CvSVM::C_SVC;
-    params.kernel_type = CvSVM::POLY;
-    params.gamma = 20;
-    params.degree = 1;
-    params.coef0 = 0;
-    
-    params.C = 7;
-    params.nu = 0.0;
-    params.p = 0.0;
-    
-    params.class_weights = NULL;
-    params.term_crit.type = CV_TERMCRIT_ITER +CV_TERMCRIT_EPS;
-    params.term_crit.max_iter = 1000;
-    params.term_crit.epsilon = 1e-6;
+    CvSVMParams params = getConfiguredSVMParams();
     
     CvSVM svm;
     
