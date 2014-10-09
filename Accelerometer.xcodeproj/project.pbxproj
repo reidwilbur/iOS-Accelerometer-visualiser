@@ -23,6 +23,7 @@
 		C30FF79819E4E6970065FB9E /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C30FF79719E4E6960065FB9E /* Accelerate.framework */; };
 		C30FF79A19E594A20065FB9E /* MotionFilter.m in Sources */ = {isa = PBXBuildFile; fileRef = C30FF79919E594A20065FB9E /* MotionFilter.m */; };
 		C30FF79F19E641F60065FB9E /* Feature.mm in Sources */ = {isa = PBXBuildFile; fileRef = C30FF79D19E641F60065FB9E /* Feature.mm */; };
+		C30FF7A219E6EE560065FB9E /* TimeFeatures.cpp in Sources */ = {isa = PBXBuildFile; fileRef = C30FF7A019E6EE560065FB9E /* TimeFeatures.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,6 +52,8 @@
 		C30FF79B19E594D40065FB9E /* MotionFilter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MotionFilter.h; sourceTree = "<group>"; };
 		C30FF79D19E641F60065FB9E /* Feature.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Feature.mm; sourceTree = "<group>"; };
 		C30FF79E19E641F60065FB9E /* Feature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Feature.h; sourceTree = "<group>"; };
+		C30FF7A019E6EE560065FB9E /* TimeFeatures.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TimeFeatures.cpp; sourceTree = "<group>"; };
+		C30FF7A119E6EE560065FB9E /* TimeFeatures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TimeFeatures.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -73,6 +76,8 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				C30FF7A019E6EE560065FB9E /* TimeFeatures.cpp */,
+				C30FF7A119E6EE560065FB9E /* TimeFeatures.h */,
 				1D3623240D0F684500981E51 /* AccelerometerAppDelegate.h */,
 				C30FF79919E594A20065FB9E /* MotionFilter.m */,
 				C30FF79B19E594D40065FB9E /* MotionFilter.h */,
@@ -214,6 +219,7 @@
 				28D7ACF80DDB3853001CB0EB /* AccelerometerViewController.mm in Sources */,
 				C30FF79F19E641F60065FB9E /* Feature.mm in Sources */,
 				5753F0D112CA211200BD7A66 /* GraphView.mm in Sources */,
+				C30FF7A219E6EE560065FB9E /* TimeFeatures.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
