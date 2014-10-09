@@ -130,8 +130,9 @@ vector<float> Feature::getTotalFeature(vector<vector<float> > input){
     vector<float> a = getPeakFeature(thirdD);
     vector<float> b = getPeakFeature(fourthD);
     a.insert( a.end(), b.begin(), b.end() );
+//    vector<float> a;
     TimeFeatures timeFeatures;
-    vector<float> timeFeatList = timeFeatures.getFeatures(input);
+    vector<float> timeFeatList = timeFeatures.getFeatures(fourthD);
     a.insert(a.end(),timeFeatList.begin(), timeFeatList.end());
     return a;
 }

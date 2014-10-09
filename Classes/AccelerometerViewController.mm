@@ -7,11 +7,13 @@
 
 using namespace std;
 
+NSString *dataFileName=@"capture4.data";
+
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-  self.dataFilePath = [[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"capture2.data"];
+  self.dataFilePath = [[self applicationDocumentsDirectory].path stringByAppendingPathComponent:dataFileName];
   self.modelPath = [[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"svm_model"];
 
   self.motionManager = [[CMMotionManager alloc] init];
@@ -133,7 +135,7 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
 CvSVMParams getConfiguredSVMParams(){
     CvSVMParams params;
     params.svm_type = CvSVM::C_SVC;
-    params.kernel_type = CvSVM::POLY;
+    params.kernel_type = CvSVM::LINEAR;
     params.gamma = 20;
     params.degree = 1;
     params.coef0 = 0;
@@ -153,7 +155,7 @@ CvSVMParams getConfiguredSVMParams(){
 -(IBAction)train
 {
   
-    NSString *filePath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"capture2.data"];
+    NSString *filePath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:dataFileName];
     std::vector<std::vector<float> > features;
     std::vector<float> label;
     getDataFromFile(filePath, features, label);

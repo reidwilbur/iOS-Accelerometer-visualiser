@@ -41,8 +41,8 @@ public:
   float getSum(vector<float>& data);
 private:
   const int sampleRate = 100;
-  const int blockSize = 32;
-  const int hopSize = 16;
+  const int blockSize = 128;
+  const int hopSize = 32;
   vector<float> oneDimensionData;
   vector<float> featList;
 };
