@@ -3,7 +3,7 @@
 
 
 @implementation AccelerometerViewController
-@synthesize plots, dataFilePath;
+@synthesize plots, dataFilePath, modelPath;
 
 using namespace std;
 
@@ -12,6 +12,7 @@ using namespace std;
     [super viewDidLoad];
     
   self.dataFilePath = [[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"capture2.data"];
+  self.modelPath = [[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"svm_model"];
 
   self.motionManager = [[CMMotionManager alloc] init];
   self.motionManager.deviceMotionUpdateInterval = 0.01;
@@ -179,9 +180,7 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
     
     svm.train(training_mat, labels, cv::Mat(), cv::Mat(), params);
     
-    NSString *modelPath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"svm_model"];
-
-    svm.save([modelPath UTF8String]);
+    svm.save([self.modelPath UTF8String]);
     
 //    svm.load([modelPath cString]);
 //    float result = svm.predict(labels);
@@ -209,8 +208,7 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
     
     CvSVM svm;
     
-    NSString *modelPath=[[self applicationDocumentsDirectory].path stringByAppendingPathComponent:@"svm_model"];
-    svm.load([modelPath UTF8String]);
+    svm.load([self.modelPath UTF8String]);
     if([self.plots count]!=0){
       vector<vector<float> > raw= Feature::to2Dvector(self.plots);
       vector<float> feature= Feature::getTotalFeature(raw);
@@ -232,27 +230,38 @@ void getDataFromFile(NSString *filePath, std::vector<std::vector<float> > &data,
   return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
 
--(IBAction)deleteAll
+-(IBAction)deleteData
+{
+  [self deleteFile:self.dataFilePath];
+}
+
+-(IBAction)deleteModel
+{
+  [self deleteFile:self.modelPath];
+}
+
+-(void)deleteFile:(NSString *)file
 {
   NSFileManager *fileManager = [NSFileManager defaultManager];
   BOOL success = false;
   NSError *error;
 
-  if ([fileManager fileExistsAtPath:self.dataFilePath]) {
-    success = [fileManager removeItemAtPath:self.dataFilePath error:&error];
+  if ([fileManager fileExistsAtPath:file]) {
+    success = [fileManager removeItemAtPath:file error:&error];
     if (success) {
-      NSString *msg = [NSString stringWithFormat:@"Deleted file %@", self.dataFilePath];
+      NSString *msg = [NSString stringWithFormat:@"Deleted file %@", file];
       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Success" message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
       [alert show];
       [alert release];
     }
     else {
-      NSString *msg = [NSString stringWithFormat:@"Could not delete %@", self.dataFilePath];
+      NSString *msg = [NSString stringWithFormat:@"Could not delete %@", file];
       UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Error" message:msg delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil];
       [alert show];
       [alert release];
     }
   }
+
 }
 
 -(IBAction)save
